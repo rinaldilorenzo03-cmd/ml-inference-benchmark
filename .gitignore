@@ -1,0 +1,20 @@
+# Ambiente virtuale
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Dataset e immagini (si riscaricano con lo script 02)
+data/val/
+data/calib/
+data/imagenet_class_index.json
+
+# File dei modelli pesanti (si rigenerano con 03 e 06)
+models/*.onnx
+models/*.data
+models/ov_models/*.bin
+models/ov_models/*.xml
+
+# File di configurazione IDE
+.vscode/
+.idea/

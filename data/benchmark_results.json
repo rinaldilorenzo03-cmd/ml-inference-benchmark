@@ -1,0 +1,27 @@
+{
+  "PyTorch FP32": {
+    "median_ms": 62.84,
+    "p95_ms": 72.02,
+    "throughput_fps": 15.95
+  },
+  "ONNX Runtime FP32": {
+    "median_ms": 33.19,
+    "p95_ms": 40.04,
+    "throughput_fps": 31.16
+  },
+  "ONNX Runtime INT8": {
+    "median_ms": 9.33,
+    "p95_ms": 12.03,
+    "throughput_fps": 105.29
+  },
+  "OpenVINO FP32": {
+    "median_ms": 25.93,
+    "p95_ms": 28.67,
+    "throughput_fps": 38.05
+  },
+  "OpenVINO INT8": {
+    "median_ms": 7.86,
+    "p95_ms": 8.94,
+    "throughput_fps": 126.01
+  }
+}
