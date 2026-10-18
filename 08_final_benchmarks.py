@@ -70,7 +70,7 @@ def benchmark_single_pass(run_id=1):
     # 1. PyTorch FP32
     print("  [1/5] Benchmark PyTorch FP32...")
     torch.set_num_threads(NUM_THREADS)
-    weights = models.ResNet50_Weights.DEFAULT
+    weights = models.ResNet50_Weights.IMAGENET1K_V2
     pt_model = models.resnet50(weights=weights).eval()
     dummy_torch = torch.from_numpy(dummy_np)
     
