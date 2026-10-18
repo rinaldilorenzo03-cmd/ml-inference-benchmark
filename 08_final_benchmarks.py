@@ -125,8 +125,8 @@ def main():
     # Esecuzione Passaggio 1
     run_1 = benchmark_single_pass(run_id=1)
 
-    print("\nPausa di 5 secondi per stabilizzazione termica prima del Run 2...")
-    time.sleep(5)
+    print("\nPausa di 60 secondi per stabilizzazione termica prima del Run 2...")
+    time.sleep(60)
 
     # Esecuzione Passaggio 2 (Ripetibilita')
     run_2 = benchmark_single_pass(run_id=2)

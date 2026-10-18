@@ -1,27 +1,27 @@
 {
   "PyTorch FP32": {
-    "median_ms": 62.84,
-    "p95_ms": 72.02,
-    "throughput_fps": 15.95
+    "median_ms": 84.38,
+    "p95_ms": 91.87,
+    "throughput_fps": 11.91
   },
   "ONNX Runtime FP32": {
-    "median_ms": 33.19,
-    "p95_ms": 40.04,
-    "throughput_fps": 31.16
+    "median_ms": 38.55,
+    "p95_ms": 48.42,
+    "throughput_fps": 25.67
   },
   "ONNX Runtime INT8": {
-    "median_ms": 9.33,
-    "p95_ms": 12.03,
-    "throughput_fps": 105.29
+    "median_ms": 12.19,
+    "p95_ms": 14.24,
+    "throughput_fps": 81.39
   },
   "OpenVINO FP32": {
-    "median_ms": 25.93,
-    "p95_ms": 28.67,
-    "throughput_fps": 38.05
+    "median_ms": 32.65,
+    "p95_ms": 37.87,
+    "throughput_fps": 29.92
   },
   "OpenVINO INT8": {
-    "median_ms": 7.86,
-    "p95_ms": 8.94,
-    "throughput_fps": 126.01
+    "median_ms": 9.53,
+    "p95_ms": 11.3,
+    "throughput_fps": 102.0
   }
 }
