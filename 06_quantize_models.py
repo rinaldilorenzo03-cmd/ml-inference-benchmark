@@ -130,33 +130,64 @@ def quantize_with_openvino_nncf(calib_samples, preprocess_fn):
 # -----------------------------------------------------------------------------
 # 4. CONFRONTO DIMENSIONI FILE SU DISCO
 # -----------------------------------------------------------------------------
+def get_onnx_model_size_mb(onnx_path: Path) -> float:
+    """Calcola la dimensione totale del modello ONNX sommando grafo e pesi esterni."""
+    if not onnx_path.exists():
+        return 0.0
+    total_bytes = onnx_path.stat().st_size
+
+    # PyTorch TorchDynamo serializza i pesi come <modello>.onnx.data o <modello>.data
+    external_data_candidates = [
+        onnx_path.with_name(onnx_path.name + ".data"),
+        onnx_path.with_suffix(".data"),
+    ]
+    for cand in set(external_data_candidates):
+        if cand.exists() and cand != onnx_path:
+            total_bytes += cand.stat().st_size
+
+    return total_bytes / (1024 * 1024)
+
+
 def print_model_sizes():
-    print("\n" + "=" * 65)
-    print("CONFRONTO FOOTPRINT SU DISCO (FP32 vs INT8)")
-    print("=" * 65)
+  print("\n" + "=" * 74)
+  print("CONFRONTO FOOTPRINT SU DISCO")
+  print("=" * 74)
 
-    size_onnx_fp32 = os.path.getsize(FP32_ONNX_PATH) / (1024 * 1024)
-    size_onnx_int8 = os.path.getsize(ORT_INT8_PATH) / (1024 * 1024)
+  size_onnx_fp32 = get_onnx_model_size_mb(FP32_ONNX_PATH)
+  size_onnx_int8 = get_onnx_model_size_mb(ORT_INT8_PATH)
 
-    # Per OpenVINO la dimensione reale dei pesi risiede nel file binario .bin
-    bin_fp32 = OV_FP32_PATH.with_suffix(".bin")
-    bin_int8 = OV_INT8_PATH.with_suffix(".bin")
-    size_ov_fp32 = os.path.getsize(bin_fp32) / (1024 * 1024) if bin_fp32.exists() else 0.0
-    size_ov_int8 = os.path.getsize(bin_int8) / (1024 * 1024) if bin_int8.exists() else 0.0
+  bin_fp32 = OV_FP32_PATH.with_suffix(".bin")
+  bin_int8 = OV_INT8_PATH.with_suffix(".bin")
+  size_ov_fp32 = (
+      os.path.getsize(bin_fp32) / (1024 * 1024) if bin_fp32.exists() else 0.0
+  )
+  size_ov_int8 = (
+      os.path.getsize(bin_int8) / (1024 * 1024) if bin_int8.exists() else 0.0
+  )
 
-    print(f"{'Formato':<24} | {'FP32 (MB)':<12} | {'INT8 (MB)':<12} | {'Compressione':<12}")
-    print("-" * 65)
-    print(f"{'ONNX Runtime (.onnx)':<24} | {size_onnx_fp32:>9.2f} MB | {size_onnx_int8:>9.2f} MB | {size_onnx_fp32/size_onnx_int8:>9.2f}x")
-    print(f"{'OpenVINO IR (.bin)':<24} | {size_ov_fp32:>9.2f} MB | {size_ov_int8:>9.2f} MB | {size_ov_fp32/size_ov_int8:>9.2f}x")
-    print("=" * 65)
+  comp_onnx = size_onnx_fp32 / size_onnx_int8 if size_onnx_int8 > 0 else 0.0
+  comp_ov = size_ov_fp32 / size_ov_int8 if size_ov_int8 > 0 else 0.0
 
+  print(
+      f"{'Formato':<34} | {'Base (MB)':<10} | {'INT8 (MB)':<10} |"
+      f" {'Compressione':<12}"
+  )
+  print("-" * 74)
+  print(
+      f"{'ONNX Runtime (.onnx, FP32)':<34} | {size_onnx_fp32:>7.2f} MB |"
+      f" {size_onnx_int8:>7.2f} MB | {comp_onnx:>10.2f}x"
+  )
+  print(
+      f"{'OpenVINO IR (.bin, pesi FP16)':<34} | {size_ov_fp32:>7.2f} MB |"
+      f" {size_ov_int8:>7.2f} MB | {comp_ov:>10.2f}x"
+    )
 
 def main():
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         manifest = json.load(f)
 
     calib_samples = manifest["calib_samples"]
-    weights = models.ResNet50_Weights.DEFAULT
+    weights = models.ResNet50_Weights.IMAGENET1K_V2
     preprocess_fn = weights.transforms()
 
     # 1. Quantizzazione ONNX Runtime
