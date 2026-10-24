@@ -68,7 +68,7 @@ Cooling on the Raspberry Pi: bare board, no heatsink or fan, in open air; ambien
 - **Validation (2,000 images):** from the `test` split of `timm/mini-imagenet`. According to the dataset card, this split comes from the official ImageNet-1k validation set. The first 20 images per class (dataset order, not shuffled) across 100 classes are used.
 - **Calibration (300 images):** from the `train` split, 3 images per class, disjoint from the validation images.
 - **Label mapping:** `imagenet_class_index.json` links the 100 local classes to the 1,000 output logits through WordNet IDs.
-- **Note:** an earlier version of this project used the `validation` split of the same dataset. That split is taken from the ImageNet-1k *training* set, so the accuracy was inflated (91.95% on 1,000 classes). It was found and fixed; all numbers here use the `test` split.
+- 
 ### 3.3 Accuracy Definitions
  
 - **Closed-world (100 classes):** argmax over the 100 logits of the subset classes.
