@@ -225,4 +225,4 @@ python benchmark_rpi.py
  
 ## 8. Development Notes
  
-The code and the benchmark scripts were written with the help of AI assistants. The author ran all experiments and measurements on the hardware described above.
+The code was written with the help of AI assistants.
